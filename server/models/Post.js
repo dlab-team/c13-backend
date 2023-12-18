@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const postSchema = new mongoose.Schema(
   {
@@ -12,15 +12,40 @@ const postSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    exercise: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    languaje: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    code_base: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    exercise_type: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    expected_result: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     status: {
       type: Boolean,
       require: true,
-    }
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
-);
+)
 
-export default mongoose.model("Post", postSchema);
+export default mongoose.model("Post", postSchema)

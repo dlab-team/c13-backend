@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer"
 import Post from "../models/Post.js"
-import { URL } from "../config.js"
 
 let resp = false
 
@@ -15,42 +14,62 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    const { title, description, status } = req.body
-    const newPost = new Post({ title, description, status })
+    const {
+      title,
+      exercise,
+      languaje,
+      code_base,
+      exercise_type,
+      expected_result,
+      status,
+    } = req.body
+    const newPost = new Post({
+      title,
+      exercise,
+      languaje,
+      code_base,
+      exercise_type,
+      expected_result,
+      status,
+    })
+    console.log("newPost")
+    console.log(newPost)
+
+    const html = `
+        <html>
+          <body>
+            <div id="resultado"><p>Sample</p></div>
+            <script>${newPost.exercise}</script>
+          </body>
+        </html>
+      `
+
     ;(async () => {
-      try {
+      const browser = await puppeteer.launch({
+        headless: "new",
+      })
+      const page = await browser.newPage()
+      await page.goto(`data:text/html,${html}`)
 
-        const browser = await puppeteer.launch({
-          headless: "new",
-        })
+      const result = await page.evaluate(
+        () => document.querySelector("#resultado").outerHTML
+      )
 
-        const page = await browser.newPage()
-        await page.goto(URL)
-        await page.waitForSelector('[id="esperado"]')
-
-        await page.screenshot({ path: "cap2.jpg" })
-
-
-        const html = await page.$eval("#esperado", (el) => el.innerHTML)
-        const esperado = html
-        // console.log(esperado)
-        // console.log(title)
-
-        if (esperado == title) {
-          // console.log("*** el mismo ***")
-          resp = true
-          await browser.close()
-          return res.json({ title, description, status: resp })
-        } else {
-          resp = false
-          await browser.close()
-          return res.json({ title, description, status: resp })
-        }
-      } catch (error) {
-        // console.log(error)
-        await browser.close()
-        return error
+      console.log(result)
+      const fraccion = result.split('<div id="resultado" ') // fijo en area de pruebas
+      
+      console.log(newPost.expected_result)
+      if (
+        fraccion[1] == newPost.expected_result
+      ) {
+        resp = true
+        console.log("coincide")
+      } else {
+        resp = false
+        console.log("NO coincide")
       }
+      await browser.close()
+      res.send(resp)
     })()
   } catch (error) {
     return res.status(500).json({ message: error.message })
