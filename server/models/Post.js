@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    exercise: {
+    content: {
       type: String,
       required: true,
       trim: true,
@@ -23,11 +23,6 @@ const postSchema = new mongoose.Schema(
       trim: true,
     },
     code_base: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    exercise_type: {
       type: String,
       required: true,
       trim: true,
