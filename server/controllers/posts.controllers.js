@@ -1,24 +1,15 @@
 import puppeteer from "puppeteer"
-import Post from "../models/Post.js"
 
 let resp = { asserted: false, result: "", err: false }
-
-export const getPosts = async (req, res) => {
-  try {
-    const posts = await Post.find({})
-    return res.json(posts)
-  } catch (error) {
-    return res.status(500).json({ message: error.message })
-  }
-}
 
 export const createPost = async (req, res) => {
   try {
     const { content, expected_result } = req.body
-    const newPost = new Post({
+    
+    const newPost = {
       content,
       expected_result,
-    })
+    }
 
     const html = newPost.content
 
