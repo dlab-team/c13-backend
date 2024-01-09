@@ -20,7 +20,7 @@ export const createPost = async (req, res) => {
           headless: "new",
         })
         const page = await browser.newPage()
-        await page.goto(`data:text/html,${encodeURIComponent(html)}`)
+        await page.goto(`data:text/html,${html}`)
 
         const result = await page.evaluate(
           () => document.querySelector("#numero").value
