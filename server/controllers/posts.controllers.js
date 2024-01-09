@@ -4,8 +4,9 @@ let resp = { asserted: false, result: "", err: false }
 
 export const createPost = async (req, res) => {
   try {
+    console.log('apipup_api/posts')
     const { content, expected_result } = req.body
-    
+
     const newPost = {
       content,
       expected_result,
@@ -19,7 +20,7 @@ export const createPost = async (req, res) => {
           headless: "new",
         })
         const page = await browser.newPage()
-        await page.goto(`data:text/html,${html}`)
+        await page.goto(`data:text/html,${encodeURIComponent(html)}`)
 
         const result = await page.evaluate(
           () => document.querySelector("#numero").value
